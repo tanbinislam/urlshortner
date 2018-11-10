@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Shrink.ml
+                    {{ config('app.name', 'Laravel') }}
                 </div>
                 <p>Sweet and simple url shortner</p>
                 @if ($errors->any())
@@ -110,7 +110,7 @@
                 <div class="card">
                     <div class="card-body">
                         <p><span class="font-weight-bold text-danger">Main Url : </span>{{session('link')}}</p>
-                        <p><span class="font-weight-bold text-success">Shrink Url: </span><a href="">{{ route('goto', ['url' => session('shr')]) }}</a></p>
+                        <p><span class="font-weight-bold text-success">Shrink Url: </span><a href="{{ route('goto', ['url' => session('shr')]) }}">{{ route('goto', ['url' => session('shr')]) }}</a></p>
                     </div>
                 </div>
                 @endif

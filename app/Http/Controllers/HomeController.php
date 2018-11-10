@@ -25,7 +25,6 @@ class HomeController extends Controller
     public function index()
     {
         $links = Links::where('user_id', auth()->user()->id)->latest()->paginate(20);
-        //dd('links')
         return view('home', compact('links'));
     }
 }
