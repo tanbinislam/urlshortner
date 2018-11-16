@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Links;
 
 class HomeController extends Controller
@@ -25,6 +24,7 @@ class HomeController extends Controller
     public function index()
     {
         $links = Links::where('user_id', auth()->user()->id)->latest()->paginate(20);
+
         return view('home', compact('links'));
     }
 }
