@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\User;
+use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
     {
         factory(App\User::class, 20)->create()->each(function ($u) {
             factory(App\Links::class, 100)->create([
-                'user_id' => $u->id,
+                'user_id'  => $u->id,
                 'unauthed' => '0',
             ]);
         });

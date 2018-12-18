@@ -15,15 +15,15 @@ class LinksController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'url'=> 'required|url'
+            'url'=> 'required|url',
         ]);
-        
+
         $short_url = $this->generateUrlId();
 
         while (Links::all()->contains($short_url)) {
             $short_url = $this->generateUrlId();
         }
-        $link = new Links;
+        $link = new Links();
         $link->main_url = $request->url;
         $link->shortened_url = $short_url;
         if (auth()->user()) {
@@ -31,13 +31,14 @@ class LinksController extends Controller
             $link->unauthed = 0;
         }
         $link->save();
+
         return redirect()->back()->with(['link' => $link->main_url, 'shr' =>$link->shortened_url]);
     }
 
-    
     public function goto($url)
     {
         $link = Links::where('shortened_url', $url)->first();
+
         return redirect($link->main_url);
     }
 
