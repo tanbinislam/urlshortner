@@ -18,9 +18,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($links as $key => $link)
+                            @foreach($links as $link)
                             <tr>
-                                <th scope="row">{{ ++$key }}</th>
+                                <th scope="row">{{ $serials++ }}</th>
                                 <td style="max-width:250px;">
                                     <a href="{{ $link->main_url }}">
                                         <i class="fas fa-external-link-alt"></i>&nbsp;{{ $link->main_url }}

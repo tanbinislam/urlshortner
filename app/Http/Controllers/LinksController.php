@@ -44,8 +44,8 @@ class LinksController extends Controller
     public function unauthed()
     {
         $links = Links::where('unauthed', 1)->latest()->paginate(20);
-        //dd($links);
-        return view('home', compact('links'));
+        $serials = (($links->currentPage() * $links->perPage()) - ($links->perPage()- 1));
+        return view('home', compact(['links', 'serials']));
     }
 
     public function generateUrlId()
