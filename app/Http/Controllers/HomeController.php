@@ -24,7 +24,8 @@ class HomeController extends Controller
     public function index()
     {
         $links = Links::where('user_id', auth()->user()->id)->latest()->paginate(20);
-        $serials = (($links->currentPage() * $links->perPage()) - ($links->perPage()- 1));
+        $serials = (($links->currentPage() * $links->perPage()) - ($links->perPage() - 1));
+
         return view('home', compact(['links', 'serials']));
     }
 }

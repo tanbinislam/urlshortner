@@ -32,7 +32,7 @@ class LinksController extends Controller
         }
         $link->save();
 
-        return response()->json(['url' => $request->url, 'shorturl' => route('goto', ['url' => $link->shortened_url]) ]);
+        return response()->json(['url' => $request->url, 'shorturl' => route('goto', ['url' => $link->shortened_url])]);
     }
 
     public function goto($url)
@@ -45,7 +45,8 @@ class LinksController extends Controller
     public function unauthed()
     {
         $links = Links::where('unauthed', 1)->latest()->paginate(20);
-        $serials = (($links->currentPage() * $links->perPage()) - ($links->perPage()- 1));
+        $serials = (($links->currentPage() * $links->perPage()) - ($links->perPage() - 1));
+
         return view('home', compact(['links', 'serials']));
     }
 
