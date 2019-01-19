@@ -32,7 +32,7 @@ class LinksController extends Controller
         }
         $link->save();
 
-        return redirect()->back()->with(['link' => $link->main_url, 'shr' =>$link->shortened_url]);
+        return response()->json(['url' => $request->url, 'shorturl' => route('goto', ['url' => $link->shortened_url]) ]);
     }
 
     public function goto($url)

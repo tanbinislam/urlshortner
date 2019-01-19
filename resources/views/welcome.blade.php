@@ -84,37 +84,63 @@
                     {{ config('app.name', 'Laravel') }}
                 </div>
                 <p>Sweet and simple url shortner</p>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                <div class="input-group mb-3">
+                    <input id="url" name="url" type="text" class="form-control" placeholder="https://Url.To.Shrink">
+                    <div class="input-group-append">
+                        <button id="submit-btn" role="button" class="btn btn-outline-secondary">Shrink</button>
                     </div>
-                @endif
-                <form action="{{route('save')}}" method="post">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input name="url" type="text" class="form-control" placeholder="https://Url.To.Shrink">
-                        <div class="input-group-append">
-                            <input type="submit" role="button" class="btn btn-outline-secondary" value="Shrink">
-                        </div>
-                    </div>
-                </form>
+                    <div id="invalid-msg" class="invalid-feedback"></div>
+                </div>
                 <p><span class="font-weight-bold">Tips: </span>Use http:// || https:// before any url</p>
                 @guest
                 <a href="{{route('lostandfound')}}">lost & found</a>
                 @endguest
-                @if(session()->has('link'))
-                <div class="card">
+                <div id="short-div" class="card d-none">
                     <div class="card-body">
-                        <p><span class="font-weight-bold text-danger">Main Url : </span>{{session('link')}}</p>
-                        <p><span class="font-weight-bold text-success">Shrink Url: </span><a href="{{ route('goto', ['url' => session('shr')]) }}">{{ route('goto', ['url' => session('shr')]) }}</a></p>
+                        <p><span class="font-weight-bold text-danger">Main Url : </span><span id="main-url"></span></p>
+                        <p><span class="font-weight-bold text-success">Shrink Url: </span><span id="short-url" class="font-weight-bold"></span></p>
+                        <button title="Copy link to clopboard" id="copy-text" class="btn btn-outline-secondary font-weight-bold">Copy</button>
                     </div>
                 </div>
-                @endif
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            $("#submit-btn").click(function(){
+                axios.post('{{route('save')}}', {
+                url : $("#url").val(),
+                _token : "{{ csrf_token() }}"
+                })
+                .then(function (response) {
+                    $("#main-url").text(response.data.url);
+                    $("#short-url").text(response.data.shorturl);
+                    $("#short-div").removeClass("d-none");
+                    $("#short-div").addClass("d-block");
+                    $("#url").val("");                    
+                    if($("#url").hasClass("is-invalid")){
+                        $("#url").removeClass("is-invalid");
+                    }
+                })
+                .catch(function (error) {
+                    if(error.response.data){
+                        if(error.response.data.errors.url){
+                            $("#url").addClass("is-invalid");
+                            $("#invalid-msg").text(error.response.data.errors.url);
+                        }
+                    }
+                });
+            });
+
+            $("#copy-text").click(function(){
+                var $temp = $("<input>");
+                $("body").append($temp);
+                var s_url = $("#short-url").text();
+                $temp.val(s_url).select();
+                document.execCommand("copy");
+                $temp.remove();
+                $("#copy-text").text("Coppied!");
+            })
+        </script>
     </body>
 </html>
